@@ -74,7 +74,8 @@ public class Main {
         }
     }
 
-    public static MutableGraph parseGraph(String filepath) throws IOException {
+    public static MutableGraph parseGraph(String filepath) throws IOException
+    {
         //System.out.println("made it into method");
         MutableGraph result = mutGraph("test").setDirected(true);
         int iterator = 0;
@@ -95,88 +96,83 @@ public class Main {
         words = findWords(line);
         //System.out.println(line + " is the current line");
         //System.out.println("made it through split");
-        try {
-            while (canContinue) {
+        try
+        {
+            while (canContinue)
+            {
                 //System.out.println("Start of outside loop. Iterator is " + iterator);
-                if (words.get(iterator).equals("strict")) {
-                    //System.out.println("strict precursor detected");
-                    iterator++;
-                    //System.out.println("iterator is: " + iterator + "and words is " + words.size());
-                }
-                if (words.get(iterator).equals("graph")) {
-                    //System.out.println("graph detected");
-                    iterator++;
-                    //System.out.println("iterator is: " + iterator + "and words is " + words.size());
-                }
-                if (words.get(iterator).equals("digraph")) {
-                    //System.out.println("digraph detected");
-                    iterator++;
-                    //System.out.println("iterator is: " + iterator + "and words is " + words.size());
-                }
-                while (canInnerContinue) {
+                iterator = checkType(words.get(iterator), iterator);
+                while (canInnerContinue)
+                {
                     //System.out.println("Start of inside loop after check. Iterator is " + iterator + "and words is " + words.size() + ". Current word is " + words.get(iterator));
-                    if (words.get(iterator).equals("{")) {
-                        if (leftSide == null) {
+                    int currentWord = typeOfInput(words.get(iterator));
+                    if (currentWord == 1)
+                    {
+                        if (leftSide == null)
+                        {
                             //System.out.println("start of parts of graph");
                             iterator++;
                             //System.out.println("iterator is: " + iterator + "and words is " + words.size());
-                        } else {
+                        }
+                        else {
                             iterator++;
                             inBracket = true;
                         }
-                    } else if (words.get(iterator).equals("->")) {
+                    }
+                    else if (currentWord == 2)
+                    {
                         //System.out.println("middle of dependence statement");
                         iterator++;
                         //System.out.println("iterator is: " + iterator + "and words is " + words.size());
 
                     }
-//                    else if (words.get(iterator).equals("["))
-//                    {
-//                        //System.out.println("beginning of dependence list");
-//                        iterator++;
-//                        inBracket = true;
-//                        //System.out.println("iterator is: " + iterator + "and words is " + words.size());
-//                    }
-//                    else if (words.get(iterator).equals("]"))
-//                    {
-//                        //System.out.println("end of dependence list");
-//                        iterator++;
-//                        inBracket = false;
-//                        //System.out.println("iterator is: " + iterator + "and words is " + words.size());
-//                    }
-                    else if (words.get(iterator).equals(",")) {
+                    else if (currentWord == 3)
+                    {
                         iterator++;
-                    } else if (words.get(iterator).equals(";")) {
+                    }
+                    else if (currentWord == 4)
+                    {
                         //System.out.println("end of statement");
                         line = readALine(scanner);
                         words = findWords(line);
                         iterator = 0;
-                    } else if (words.get(iterator).equals("}")) {
+                    }
+                    else if (currentWord == 5)
+                    {
                         //System.out.println("end of declaration of graph");
-                        if (inBracket) {
+                        if (inBracket)
+                        {
                             iterator++;
                             inBracket = false;
-                        } else {
+                        }
+                        else
+                        {
                             canInnerContinue = false;
                         }
-                    } else {
+                    }
+                    else
+                    {
                         if (leftSide == null) // the word at hand is the left side of the statement
                         {
                             leftSide = words.get(iterator);
                             iterator++;
                             //System.out.println(leftSide + "is left side");
-                        } else // the word at hand is the right side of the statement
+                        }
+                        else // the word at hand is the right side of the statement
                         {
                             rightSide = words.get(iterator);
                             //System.out.println(rightSide + "is right side");
                             iterator++;
                             MutableNode left = null;
                             MutableNode right = null;
-                            for (MutableNode node : result.nodes()) {
-                                if (node.name().toString().equals(leftSide)) {
+                            for (MutableNode node : result.nodes())
+                            {
+                                if (node.name().toString().equals(leftSide))
+                                {
                                     left = node;
                                 }
-                                if (node.name().toString().equals(rightSide)) {
+                                if (node.name().toString().equals(rightSide))
+                                {
                                     right = node;
                                 }
                             }
@@ -200,9 +196,7 @@ public class Main {
                     }
                 }
                 //line = scanner.readLine();
-
                 line = readALine(scanner);
-//
                 canContinue = false;
             }
         } catch (IOException e) {
@@ -269,10 +263,10 @@ public class Main {
         MutableNode node2 = null;
         for (MutableNode node : g.nodes()) {
             if (node.name().toString().equals(srcLabel)) {
-                node1 = node2 = mutNode(dstLabel);
+                node1 = mutNode(srcLabel);
                 ;
             } else if (node.name().toString().equals(dstLabel)) {
-                node2 = node2 = mutNode(dstLabel);
+                node2 = mutNode(dstLabel);
                 ;
             }
             for (Link link : node.links()) {
@@ -312,8 +306,10 @@ public class Main {
             temp.links().clear();
 
             Iterator<MutableNode> check = g.rootNodes().iterator();
-            while (check.hasNext()) {
-                if (check.next().equals(temp)) {
+            while (check.hasNext())
+            {
+                if (check.next().equals(temp))
+                {
                     check.remove();
                     break;
                 }
@@ -340,106 +336,16 @@ public class Main {
     }
 
     public static String graphSearch(MutableGraph g, Node src, Node dst, type t) {
-        if (t == type.BFS) {
-            String sName = src.name().toString();
-            String dName = dst.name().toString();
-
-            MutableNode sNode = g.rootNodes().stream().filter(node -> node.name().toString().equals(sName)).findFirst().orElse(null);
-            MutableNode dNode = g.rootNodes().stream().filter(node -> node.name().toString().equals(dName)).findFirst().orElse(null);
-
-            if (sNode != null || dNode != null) {
-                return null;
-            }
-
-            Queue<MutableNode> queue = new LinkedList<>();
-            Map<MutableNode, MutableNode> predecessors = new HashMap<>();
-            Set<MutableNode> visited = new HashSet<>();
-
-            queue.add(sNode);
-            visited.add(sNode);
-
-            while (!queue.isEmpty()) {
-                MutableNode current = queue.poll();
-                if (current.equals(dNode)) {
-                    //output list of nodes visited
-                    LinkedList<MutableNode> path = new LinkedList<>();
-
-                    for (MutableNode at = dNode; at != null; at = predecessors.get(at)) {
-                        path.addFirst(at);
-                    }
-
-                    if (!path.getFirst().equals(sNode)) {
-                        return "Path between these nodes not found";
-                    }
-
-                    return path.stream()
-                            .map(node -> node.name().toString())
-                            .reduce((a, b) -> a + " -> " + b)
-                            .orElse("");
-                }
-
-                for (Link link : current.links()) {
-                    MutableNode neighbor = (MutableNode) link.to();
-                    if (!visited.contains(neighbor)) {
-                        queue.add(neighbor);
-                        visited.add(neighbor);
-                        predecessors.put(neighbor, current);
-                    }
-                }
-            }
-        } else {
-            String sName = src.name().toString();
-            String dName = dst.name().toString();
-
-
-            MutableNode sNode = g.rootNodes().stream().filter(node -> node.name().toString().equals(sName)).findFirst().orElse(null);
-            MutableNode dNode = g.rootNodes().stream().filter(node -> node.name().toString().equals(sName)).findFirst().orElse(null);
-
-
-            Stack<MutableNode> stack = new Stack<>();
-            Map<MutableNode, MutableNode> predecessors = new HashMap<>();
-            Set<MutableNode> visited = new HashSet<>();
-
-
-            while (!stack.isEmpty()) {
-                MutableNode current = stack.pop();
-
-
-                if (current.equals(dNode)) {
-                    //output list of nodes visited
-                    LinkedList<MutableNode> path = new LinkedList<>();
-
-
-                    for (MutableNode at = dNode; at != null; at = predecessors.get(at)) {
-                        path.addFirst(at);
-                    }
-
-
-                    if (!path.getFirst().equals(sNode)) {
-                        return null; // Return null if there's no valid path from start to target
-                    }
-
-
-                    return path.stream()
-                            .map(node -> node.name().toString())
-                            .reduce((a, b) -> a + " -> " + b)
-                            .orElse("");
-                }
-                for (Link link : current.links()) {
-                    MutableNode neighbor = (MutableNode) link.to();
-
-
-                    if (!visited.contains(neighbor)) {
-                        stack.push(neighbor);
-                        visited.add(neighbor);
-                        predecessors.put(neighbor, current);
-                    }
-                }
-
-            }
-            return "Destination Node not found";
+        String result = "";
+        if (t == type.BFS)
+        {
+            BFS(g, src, dst, t);
         }
-        return "Destination Node not found";
+        else
+        {
+            DFS(g, src, dst, t);
+        }
+        return result;
     }
     //helper methods
     public static ArrayList<String> findWords(String line)
@@ -462,5 +368,161 @@ public class Main {
             }
         }
         return line;
+    }
+    public static int checkType(String word, int iterator)
+    {
+        if (word.equals("strict")) {
+            //System.out.println("strict precursor detected");
+            iterator++;
+            //System.out.println("iterator is: " + iterator + "and words is " + words.size());
+        }
+        if (word.equals("graph")) {
+            //System.out.println("graph detected");
+            iterator++;
+            //System.out.println("iterator is: " + iterator + "and words is " + words.size());
+        }
+        if (word.equals("digraph")) {
+            //System.out.println("digraph detected");
+            iterator++;
+            //System.out.println("iterator is: " + iterator + "and words is " + words.size());
+        }
+        return iterator;
+    }
+    public static int typeOfInput(String word)
+    {
+        if(word.equals("{"))
+        {
+            return 1;
+        }
+        else if(word.equals("->"))
+        {
+            return 2;
+        }
+        else if(word.equals(","))
+        {
+            return 3;
+        }
+        else if(word.equals(";"))
+        {
+            return 4;
+        }
+        if(word.equals("}"))
+        {
+            return 5;
+        }
+        else
+        {
+            return 6;
+        }
+    }
+    public static String BFS(MutableGraph g, Node src, Node dst, type t)
+    {
+        String sName = src.name().toString();
+        String dName = dst.name().toString();
+
+        MutableNode sNode = g.rootNodes().stream().filter(node -> node.name().toString().equals(sName)).findFirst().orElse(null);
+        MutableNode dNode = g.rootNodes().stream().filter(node -> node.name().toString().equals(dName)).findFirst().orElse(null);
+
+        if (sNode != null || dNode != null)
+        {
+            return null;
+        }
+
+        Queue<MutableNode> queue = new LinkedList<>();
+        Map<MutableNode, MutableNode> predecessors = new HashMap<>();
+        Set<MutableNode> visited = new HashSet<>();
+
+        queue.add(sNode);
+        visited.add(sNode);
+
+        while (!queue.isEmpty())
+        {
+            MutableNode current = queue.poll();
+            if (current.equals(dNode))
+            {
+                //output list of nodes visited
+                LinkedList<MutableNode> path = new LinkedList<>();
+
+                for (MutableNode at = dNode; at != null; at = predecessors.get(at))
+                {
+                    path.addFirst(at);
+                }
+
+                if (!path.getFirst().equals(sNode))
+                {
+                    return "Path between these nodes not found";
+                }
+
+                return path.stream()
+                        .map(node -> node.name().toString())
+                        .reduce((a, b) -> a + " -> " + b)
+                        .orElse("");
+            }
+
+            for (Link link : current.links())
+            {
+                MutableNode neighbor = (MutableNode) link.to();
+                if (!visited.contains(neighbor))
+                {
+                    queue.add(neighbor);
+                    visited.add(neighbor);
+                    predecessors.put(neighbor, current);
+                }
+            }
+        }
+        return "Destination Node not found";
+    }
+    public static String DFS(MutableGraph g, Node src, Node dst, type t)
+    {
+        String sName = src.name().toString();
+        String dName = dst.name().toString();
+
+
+        MutableNode sNode = g.rootNodes().stream().filter(node -> node.name().toString().equals(sName)).findFirst().orElse(null);
+        MutableNode dNode = g.rootNodes().stream().filter(node -> node.name().toString().equals(sName)).findFirst().orElse(null);
+
+
+        Stack<MutableNode> stack = new Stack<>();
+        Map<MutableNode, MutableNode> predecessors = new HashMap<>();
+        Set<MutableNode> visited = new HashSet<>();
+
+
+        while (!stack.isEmpty()) {
+            MutableNode current = stack.pop();
+
+
+            if (current.equals(dNode)) {
+                //output list of nodes visited
+                LinkedList<MutableNode> path = new LinkedList<>();
+
+
+                for (MutableNode at = dNode; at != null; at = predecessors.get(at)) {
+                    path.addFirst(at);
+                }
+
+
+                if (!path.getFirst().equals(sNode)) {
+                    return null; // Return null if there's no valid path from start to target
+                }
+
+
+                return path.stream()
+                        .map(node -> node.name().toString())
+                        .reduce((a, b) -> a + " -> " + b)
+                        .orElse("");
+            }
+            for (Link link : current.links()) {
+                MutableNode neighbor = (MutableNode) link.to();
+
+
+                if (!visited.contains(neighbor)) {
+                    stack.push(neighbor);
+                    visited.add(neighbor);
+                    predecessors.put(neighbor, current);
+                }
+            }
+
+        }
+        return "Destination Node not found";
     }
 }
