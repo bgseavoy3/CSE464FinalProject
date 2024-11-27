@@ -335,15 +335,15 @@ public class Main {
         return g;
     }
 
-    public static String graphSearch(MutableGraph g, Node src, Node dst, type t) {
-        String result = "";
+    public static String graphSearch(MutableGraph g, MutableNode src, MutableNode dst, type t) {
+        String result;
         if (t == type.BFS)
         {
-            BFS(g, src, dst, t);
+            result = DoBFS(g, src, dst);
         }
         else
         {
-            DFS(g, src, dst, t);
+            result = DoDFS(g, src, dst);
         }
         return result;
     }
@@ -415,114 +415,15 @@ public class Main {
             return 6;
         }
     }
-    public static String BFS(MutableGraph g, Node src, Node dst, type t)
+    public static String DoBFS(MutableGraph g, MutableNode src, MutableNode dst)
     {
-        String sName = src.name().toString();
-        String dName = dst.name().toString();
-
-        MutableNode sNode = g.rootNodes().stream().filter(node -> node.name().toString().equals(sName)).findFirst().orElse(null);
-        MutableNode dNode = g.rootNodes().stream().filter(node -> node.name().toString().equals(dName)).findFirst().orElse(null);
-
-        if (sNode != null || dNode != null)
-        {
-            return null;
-        }
-
-        Queue<MutableNode> queue = new LinkedList<>();
-        Map<MutableNode, MutableNode> predecessors = new HashMap<>();
-        Set<MutableNode> visited = new HashSet<>();
-
-        queue.add(sNode);
-        visited.add(sNode);
-
-        while (!queue.isEmpty())
-        {
-            MutableNode current = queue.poll();
-            if (current.equals(dNode))
-            {
-                //output list of nodes visited
-                LinkedList<MutableNode> path = new LinkedList<>();
-
-                for (MutableNode at = dNode; at != null; at = predecessors.get(at))
-                {
-                    path.addFirst(at);
-                }
-
-                if (!path.getFirst().equals(sNode))
-                {
-                    return "Path between these nodes not found";
-                }
-
-                return path.stream()
-                        .map(node -> node.name().toString())
-                        .reduce((a, b) -> a + " -> " + b)
-                        .orElse("");
-            }
-
-            for (Link link : current.links())
-            {
-                MutableNode neighbor = (MutableNode) link.to();
-                if (!visited.contains(neighbor))
-                {
-                    queue.add(neighbor);
-                    visited.add(neighbor);
-                    predecessors.put(neighbor, current);
-                }
-            }
-        }
-        return "Destination Node not found";
+    BFS bfs = new BFS(g, src, dst);
+    return bfs.Path();
     }
-    public static String DFS(MutableGraph g, Node src, Node dst, type t)
+    public static String DoDFS(MutableGraph g, MutableNode src, MutableNode dst)
     {
-        String sName = src.name().toString();
-        String dName = dst.name().toString();
-
-
-        MutableNode sNode = g.rootNodes().stream().filter(node -> node.name().toString().equals(sName)).findFirst().orElse(null);
-        MutableNode dNode = g.rootNodes().stream().filter(node -> node.name().toString().equals(sName)).findFirst().orElse(null);
-
-
-        Stack<MutableNode> stack = new Stack<>();
-        Map<MutableNode, MutableNode> predecessors = new HashMap<>();
-        Set<MutableNode> visited = new HashSet<>();
-
-
-        while (!stack.isEmpty()) {
-            MutableNode current = stack.pop();
-
-
-            if (current.equals(dNode)) {
-                //output list of nodes visited
-                LinkedList<MutableNode> path = new LinkedList<>();
-
-
-                for (MutableNode at = dNode; at != null; at = predecessors.get(at)) {
-                    path.addFirst(at);
-                }
-
-
-                if (!path.getFirst().equals(sNode)) {
-                    return null; // Return null if there's no valid path from start to target
-                }
-
-
-                return path.stream()
-                        .map(node -> node.name().toString())
-                        .reduce((a, b) -> a + " -> " + b)
-                        .orElse("");
-            }
-            for (Link link : current.links()) {
-                MutableNode neighbor = (MutableNode) link.to();
-
-
-                if (!visited.contains(neighbor)) {
-                    stack.push(neighbor);
-                    visited.add(neighbor);
-                    predecessors.put(neighbor, current);
-                }
-            }
-
-        }
-        return "Destination Node not found";
+        DFS dfs = new DFS(g, src, dst);
+        return dfs.Path();
     }
+
 }
