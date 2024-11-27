@@ -21,6 +21,7 @@ public class Commit1Test {
 
     @Test
     public void firstTest() throws IOException { // test base functionality, input is Commit1Test1.dot
+        System.out.println("Start Test 1");
         java.net.URL location = getClass().getClassLoader().getResource("Commit1Test1.dot");
         String fileLocation = java.net.URLDecoder.decode(location.getPath(), "UTF-8");
 

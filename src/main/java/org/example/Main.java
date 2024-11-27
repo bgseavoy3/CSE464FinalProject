@@ -27,13 +27,13 @@ public class Main {
         while (!exit) {
             System.out.println("Please enter the number for what would would like to do\n 1: print out graph info\n2: add a new node\n3: add a new edge\n4: output graph to a file location\n5: exit");
             input = sc.nextLine();
-            if (input == "1") {
+            if (input.equals("1")) {
                 Main.toString(result);
             }
-            if (input == "2") {
+            if (input.equals("2")) {
                 System.out.println("Type 1 for 1 entry, 2 for multiple");
                 input = sc.nextLine();
-                if (input == "1") {
+                if (input.equals("1")) {
                     System.out.println("Enter new node name");
                     input = sc.nextLine();
                     Main.addNode(result, input);
@@ -43,20 +43,21 @@ public class Main {
                         input = sc.nextLine();
                         if (input.equals("exit")) {
 
-                        } else {
+                        }
+                        else {
                             Main.addNode(result, input);
                         }
                     }
                 }
             }
-            if (input == "3") {
+            if (input.equals("3")) {
                 System.out.println("Enter source node name");
                 String input1 = sc.nextLine();
                 System.out.println("Enter destination node name");
                 String input2 = sc.nextLine();
                 Main.addEdge(result, input1, input2);
             }
-            if (input == "4") {
+            if (input.equals("4")) {
                 System.out.println("Enter file output location");
                 String input1 = sc.nextLine();
                 System.out.println("Enter output type. Current forms available are dot and png");
@@ -67,7 +68,7 @@ public class Main {
                     Main.outputGraphics(result, input1, input2);
                 }
             }
-            if (input == "5") {
+            if (input.equals("5")) {
                 exit = true;
             }
         }
@@ -85,24 +86,13 @@ public class Main {
         boolean canInnerContinue = true;
         boolean inBracket = false;
         //System.out.println("made it through init");
-        String regExpression = "\\w+|->|[{}\\[\\];,]";
-        Pattern regPattern = Pattern.compile(regExpression);
-        Matcher match;
         String line = "";
         int current;
         char c;
-
-        while ((line = scanner.readLine()) != null) {
-            if (line.indexOf(';') != -1 || line.indexOf('}') != -1) {
-                break;
-            }
-        }
+        ArrayList<String> words;
+        line = readALine(scanner);
         //System.out.println("line is: " + line);
-        ArrayList<String> words = new ArrayList<>();
-        match = regPattern.matcher(line);
-        while (match.find()) {
-            words.add(match.group());
-        }
+        words = findWords(line);
         //System.out.println(line + " is the current line");
         //System.out.println("made it through split");
         try {
@@ -158,17 +148,8 @@ public class Main {
                         iterator++;
                     } else if (words.get(iterator).equals(";")) {
                         //System.out.println("end of statement");
-                        while ((line = scanner.readLine()) != null) {
-                            if (line.indexOf(';') != -1 || line.indexOf('}') != -1) {
-                                break;
-                            }
-                        }
-
-                        match = regPattern.matcher(line);
-                        words.clear();
-                        while (match.find()) {
-                            words.add(match.group());
-                        }
+                        line = readALine(scanner);
+                        words = findWords(line);
                         iterator = 0;
                     } else if (words.get(iterator).equals("}")) {
                         //System.out.println("end of declaration of graph");
@@ -220,11 +201,7 @@ public class Main {
                 }
                 //line = scanner.readLine();
 
-                while ((line = scanner.readLine()) != null) {
-                    if (line.indexOf(';') != -1 || line.indexOf('}') != -1) {
-                        break;
-                    }
-                }
+                line = readALine(scanner);
 //
                 canContinue = false;
             }
@@ -463,5 +440,27 @@ public class Main {
             return "Destination Node not found";
         }
         return "Destination Node not found";
+    }
+    //helper methods
+    public static ArrayList<String> findWords(String line)
+    {
+        ArrayList<String> words = new ArrayList<>();
+        Matcher match;
+        String regExpression = "\\w+|->|[{}\\[\\];,]";
+        Pattern regPattern = Pattern.compile(regExpression);
+        match = regPattern.matcher(line);
+        while (match.find()) {
+            words.add(match.group());
+        }
+        return words;
+    }
+    public static String readALine(BufferedReader scanner) throws IOException {
+        String line;
+        while ((line = scanner.readLine()) != null) {
+            if (line.indexOf(';') != -1 || line.indexOf('}') != -1) {
+                break;
+            }
+        }
+        return line;
     }
 }
