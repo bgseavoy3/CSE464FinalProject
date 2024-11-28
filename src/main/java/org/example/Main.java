@@ -87,7 +87,13 @@ public class Main {
             }
             if (input.equals("7"))
             {
-
+                System.out.println("Type the name of the starting node");
+                String input1 = sc.nextLine();
+                System.out.println("Enter the name of the destination node");
+                String input2 = sc.nextLine();
+                MutableNode sNode = result.rootNodes().stream().filter(node -> node.name().toString().equals(input1)).findFirst().orElse(null);
+                MutableNode dNode = result.rootNodes().stream().filter(node -> node.name().toString().equals(input1)).findFirst().orElse(null);
+                walkSearch(result,sNode,dNode);
             }
             if (input.equals("8"))
             {
@@ -369,6 +375,78 @@ public class Main {
         }
         return result;
     }
+    public static void walkSearch(MutableGraph g, MutableNode src, MutableNode dst)
+    {
+        boolean notFound = true;
+        LinkedList<MutableNode> trail = new LinkedList<>();
+        LinkedList<MutableNode> checked = new LinkedList<>();
+        MutableNode temp = src;
+        trail.add(temp);
+        checked.add(temp);
+        int numOfChecked = 0;
+        while(notFound)
+        {
+           MutableNode temp2 = getRandomNeighbor(temp);
+           if(temp2 == dst)
+           {
+               trail.add(temp2);
+               randomToString(trail);
+               return;
+           }
+            if(isChecked(temp2, checked))
+            {
+                //is already looked at, don't do anything
+                if(temp.links().size() <= 1)
+                {
+                    //if this is the only option, go back a node
+                    if(trail.size() > 1)
+                    {
+                        trail.remove(trail.getLast());
+                        temp = trail.getLast();
+                        numOfChecked = 0;
+                    }
+                    else
+                    {
+                        System.out.println("error, no link found");
+                        return;
+                    }
+                }
+            }
+            else {
+                randomToString(trail);
+                if (numOfChecked == temp.links().size())
+                {
+                    //checked all neighbors of current node, must take a step back
+                    if(trail.size() > 1)
+                    {
+                        trail.remove(trail.getLast());
+                        temp = trail.getLast();
+                        numOfChecked = 0;
+                    }
+                    else
+                    {
+                        System.out.println("error, no link found");
+                        return;
+                    }
+                }
+                else if (temp2.links().size() == 0)
+                {
+                    // no links to go to, must find another node
+                    numOfChecked++;
+                }
+                else
+                {
+                    //new node to check. go to new node
+                    temp = temp2;
+                    trail.add(temp);
+                    checked.add(temp);
+                    numOfChecked = 0;
+                }
+            }
+
+
+        }
+    }
     //helper methods
     public static ArrayList<String> findWords(String line)
     {
@@ -447,5 +525,43 @@ public class Main {
         DFS dfs = new DFS(g, src, dst);
         return dfs.Path();
     }
+    public static MutableNode getRandomNeighbor(MutableNode n)
+    {
+        List<Link> links = new ArrayList<>(n.links());
+        if(links.isEmpty())
+        {
+            return null;
+        }
+        int randomIndex = (int) (Math.random() * links.size());
+        return (MutableNode) links.get(randomIndex).to();
 
+    }
+    public static String randomToString(LinkedList<MutableNode> l)
+    {
+        String str = "visiting Path{nodes=[";;
+        for (int i = 0; i < l.size(); i++)
+        {
+            if(i < l.size() - 1)
+            {
+                str = str.concat("Node{" + l.get(i).name().toString() + "},");
+            }
+            else
+            {
+                str = str.concat("Node{" + l.get(i).name().toString() + "}]}");
+
+            }
+        }
+        return str;
+    }
+    public static boolean isChecked(MutableNode n, LinkedList<MutableNode> checked)
+    {
+        for(MutableNode node : checked)
+        {
+            if(node.name().toString().equals(n.name().toString()))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 }
