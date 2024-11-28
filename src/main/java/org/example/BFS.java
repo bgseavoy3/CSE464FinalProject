@@ -7,14 +7,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class BFS extends Search
+public class BFS extends Search implements Strategy
 {
     public BFS(MutableGraph g, MutableNode sNode, MutableNode dNode)
     {
         super(g, sNode, dNode);
     }
     @Override
-    protected List<MutableNode> search()
+    public List<MutableNode> search()
     {
         while(!sq.isEmpty())
         {
@@ -31,5 +31,9 @@ public class BFS extends Search
             exploreNeighbors(current, path);
         }
         return null;
+    }
+    public Strategy getStrategy(MutableGraph g, MutableNode sNode, MutableNode dNode)
+    {
+        return new BFS(g, sNode, dNode);
     }
 }

@@ -7,14 +7,14 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-public class DFS extends Search
+public class DFS extends Search implements Strategy
 {
     public DFS(MutableGraph g, MutableNode sNode, MutableNode dNode)
     {
         super(g, sNode, dNode);
     }
     @Override
-    protected List<MutableNode> search()
+    public List<MutableNode> search()
     {
         while(!sq.isEmpty())
         {
@@ -31,5 +31,9 @@ public class DFS extends Search
             exploreNeighbors(current, path);
         }
         return null;
+    }
+    public Strategy getStrategy(MutableGraph g, MutableNode sNode, MutableNode dNode)
+    {
+        return new DFS(g, sNode, dNode);
     }
 }

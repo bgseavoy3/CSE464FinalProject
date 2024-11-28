@@ -11,10 +11,6 @@ import static guru.nidi.graphviz.model.Factory.mutGraph;
 import static guru.nidi.graphviz.model.Factory.mutNode;
 
 public class Main {
-    public enum type {
-        BFS,
-        DFS
-    }
 
     public static void main(String[] args) throws IOException {
         Scanner sc = new Scanner(System.in);
@@ -25,7 +21,7 @@ public class Main {
         boolean exit = false;
         String input;
         while (!exit) {
-            System.out.println("Please enter the number for what would would like to do\n 1: print out graph info\n2: add a new node\n3: add a new edge\n4: output graph to a file location\n5: exit");
+            System.out.println("Please enter the number for what would would like to do\n 1: print out graph info\n2: add a new node\n3: add a new edge\n4: output graph to a file location\n5: Perform a BFS to find a path between 2 nodes\n6: Perform a DFS to find a path between nodes\n7: Perform the random walk search to find a path between two nodes\n8: exit");
             input = sc.nextLine();
             if (input.equals("1")) {
                 Main.toString(result);
@@ -68,7 +64,33 @@ public class Main {
                     Main.outputGraphics(result, input1, input2);
                 }
             }
-            if (input.equals("5")) {
+            if (input.equals("5"))
+            {
+                System.out.println("Type the name of the starting node");
+                String input1 = sc.nextLine();
+                System.out.println("Enter the name of the destination node");
+                String input2 = sc.nextLine();
+                MutableNode sNode = result.rootNodes().stream().filter(node -> node.name().toString().equals(input1)).findFirst().orElse(null);
+                MutableNode dNode = result.rootNodes().stream().filter(node -> node.name().toString().equals(input1)).findFirst().orElse(null);
+                graphSearch(result, sNode, dNode, Strategy.Algorithm.BFS);
+
+            }
+            if (input.equals("6"))
+            {
+                System.out.println("Type the name of the starting node");
+                String input1 = sc.nextLine();
+                System.out.println("Enter the name of the destination node");
+                String input2 = sc.nextLine();
+                MutableNode sNode = result.rootNodes().stream().filter(node -> node.name().toString().equals(input1)).findFirst().orElse(null);
+                MutableNode dNode = result.rootNodes().stream().filter(node -> node.name().toString().equals(input1)).findFirst().orElse(null);
+                graphSearch(result, sNode, dNode, Strategy.Algorithm.DFS);
+            }
+            if (input.equals("7"))
+            {
+
+            }
+            if (input.equals("8"))
+            {
                 exit = true;
             }
         }
@@ -335,9 +357,9 @@ public class Main {
         return g;
     }
 
-    public static String graphSearch(MutableGraph g, MutableNode src, MutableNode dst, type t) {
+    public static String graphSearch(MutableGraph g, MutableNode src, MutableNode dst, Strategy.Algorithm t) {
         String result;
-        if (t == type.BFS)
+        if (t == Strategy.Algorithm.BFS)
         {
             result = DoBFS(g, src, dst);
         }
@@ -417,8 +439,8 @@ public class Main {
     }
     public static String DoBFS(MutableGraph g, MutableNode src, MutableNode dst)
     {
-    BFS bfs = new BFS(g, src, dst);
-    return bfs.Path();
+        BFS bfs = new BFS(g, src, dst);
+        return bfs.Path();
     }
     public static String DoDFS(MutableGraph g, MutableNode src, MutableNode dst)
     {

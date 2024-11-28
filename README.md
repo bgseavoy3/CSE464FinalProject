@@ -14,6 +14,8 @@ method, as I used this difference to achieve the correct stack and queue propert
 the available neighbors of the current node. Finally, initialization was the same for both, as I used the same data structures for both algorithms. The BFS and DFS classes' main difference is the
 search algorithm, which is somewhat similar between both, but I decided to keep separate due to the fields and local variables needed.
 
-
+3) I applied the strategy pattern by creating an interface call Strategy that works as the strategy context. This lets the context interact with the strategy without breaking encapsulation, as the
+interface I made requires the user to use it to initialize either the BFS or DFS objects. These are from the last step, and store the rest of the strategy pattern. This keeps the whole system
+encapsulated, and lets the user interact with it without breaking this.
 
 Continuous integration - as I did not have this set up for the last project, I set it up for this one, I will add screenshots for that along with expected outputs below 
