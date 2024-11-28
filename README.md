@@ -19,3 +19,10 @@ interface I made requires the user to use it to initialize either the BFS or DFS
 encapsulated, and lets the user interact with it without breaking this.
 
 Continuous integration - as I did not have this set up for the last project, I set it up for this one, I will add screenshots for that along with expected outputs below 
+
+How to use:
+1) start by entering the command "mvn dependency:copy-dependencies -DoutputDirectory=lib" to double check dependencies
+2) enter the command"mvn clean compile"
+3) enter the command "mvn package"
+4) enter the command  " java -cp target/test-1.0-SNAPSHOT.jar:lib/* org.example.Main"
+5) follow the commands inside of the program

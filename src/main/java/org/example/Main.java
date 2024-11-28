@@ -16,7 +16,9 @@ public class Main {
         Scanner sc = new Scanner(System.in);
         System.out.println("Please enter the file path of your dot file");
         String filePath = sc.nextLine();
-        MutableGraph result = parseGraph(filePath);
+        java.net.URL location = Main.class.getClassLoader().getResource(filePath);
+        String fileLocation = java.net.URLDecoder.decode(location.getPath(), "UTF-8");
+        MutableGraph result = parseGraph(fileLocation);
         System.out.println("File is parsed successfully");
         boolean exit = false;
         String input;
@@ -386,13 +388,13 @@ public class Main {
         int numOfChecked = 0;
         while(notFound)
         {
-           MutableNode temp2 = getRandomNeighbor(temp);
-           if(temp2 == dst)
-           {
-               trail.add(temp2);
-               randomToString(trail);
-               return;
-           }
+            MutableNode temp2 = getRandomNeighbor(temp);
+            if(temp2 == dst)
+            {
+                trail.add(temp2);
+                randomToString(trail);
+                return;
+            }
             if(isChecked(temp2, checked))
             {
                 //is already looked at, don't do anything
