@@ -8,6 +8,7 @@ import guru.nidi.graphviz.model.MutableNode;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
 import org.junit.jupiter.api.Test;
 
@@ -22,10 +23,7 @@ public class Commit1Test {
     @Test
     public void firstTest() throws IOException { // test base functionality, input is Commit1Test1.dot
         System.out.println("Start Test 1");
-        java.net.URL location = getClass().getClassLoader().getResource("Commit1Test1.dot");
-        String fileLocation = java.net.URLDecoder.decode(location.getPath(), "UTF-8");
-
-        MutableGraph g = parseGraph(fileLocation);
+        MutableGraph g = parseGraph("Commit1Test1.dot");
         MutableNode left = mutNode("A");
         MutableNode right = mutNode("B");
 
@@ -41,12 +39,9 @@ public class Commit1Test {
     @Test
     public void secondTest() throws IOException { // test example given in assignment description, input is Commit1Test2.dot
         System.out.println("Start Test 2");
-        java.net.URL location = getClass().getClassLoader().getResource("Commit1Test2.dot");
-        String fileLocation = java.net.URLDecoder.decode(location.getPath(), "UTF-8");
 
-        System.out.println("File found");
 
-        MutableGraph g = parseGraph(fileLocation);
+        MutableGraph g = parseGraph("Commit1Test2.dot");
 
         System.out.println("Parse Finished");
 
@@ -114,12 +109,10 @@ public class Commit1Test {
     public void thirdTest() throws IOException { // test bracket link setup, input is Commit1Test4.dot
 
         System.out.println("Start Test 3");
-        java.net.URL location = getClass().getClassLoader().getResource("Commit1Test3.dot");
-        String fileLocation = java.net.URLDecoder.decode(location.getPath(), "UTF-8");
 
         System.out.println("File found");
 
-        MutableGraph g = parseGraph(fileLocation);
+        MutableGraph g = parseGraph("Commit1Test3.dot");
 
         System.out.println("Parse Finished");
 

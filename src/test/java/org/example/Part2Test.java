@@ -13,12 +13,8 @@ public class Part2Test {
     public void testOne() throws IOException // tests basic ability to remove node. Uses Commit1Test3.dot
     {
         System.out.println("Start Test 1");
-        java.net.URL location = getClass().getClassLoader().getResource("Commit1Test2.dot");
-        String fileLocation = java.net.URLDecoder.decode(location.getPath(), "UTF-8");
 
-        System.out.println("File found");
-
-        MutableGraph g = parseGraph(fileLocation);
+        MutableGraph g = parseGraph("Commit1Test3.dot");
 
         System.out.println("Parse Finished");
 
@@ -34,12 +30,8 @@ public class Part2Test {
     public void testTwo() throws IOException // test ability to remove multiple nodes. Uses Commit1Test3.dot
     {
         System.out.println("Start Test 2");
-        java.net.URL location = getClass().getClassLoader().getResource("Commit1Test2.dot");
-        String fileLocation = java.net.URLDecoder.decode(location.getPath(), "UTF-8");
 
-        System.out.println("File found");
-
-        MutableGraph g = parseGraph(fileLocation);
+        MutableGraph g = parseGraph("Commit1Test3.dot");
 
         System.out.println("Parse Finished");
 
@@ -57,12 +49,8 @@ public class Part2Test {
     public void testThree() throws IOException // test ability to handle case where node that is being removed is not a real node. Uses Commit1Test3.dot
     {
         System.out.println("Start Test 3");
-        java.net.URL location = getClass().getClassLoader().getResource("Commit1Test2.dot");
-        String fileLocation = java.net.URLDecoder.decode(location.getPath(), "UTF-8");
 
-        System.out.println("File found");
-
-        MutableGraph g = parseGraph(fileLocation);
+        MutableGraph g = parseGraph("Commit1Test3.dot");
 
         System.out.println("Parse Finished");
 
@@ -78,12 +66,8 @@ public class Part2Test {
     public void testFour() throws IOException // test ability to handle when all 3 nodes being removed are not real. Uses Commit1Test3.dot
     {
         System.out.println("Start Test 4");
-        java.net.URL location = getClass().getClassLoader().getResource("Commit1Test2.dot");
-        String fileLocation = java.net.URLDecoder.decode(location.getPath(), "UTF-8");
 
-        System.out.println("File found");
-
-        MutableGraph g = parseGraph(fileLocation);
+        MutableGraph g = parseGraph("Commit1Test3.dot");
 
         System.out.println("Parse Finished");
 
@@ -101,12 +85,10 @@ public class Part2Test {
     public void testFive() throws IOException // test ability to handle when all nodes that are being removed are not real nodes. Uses Commit1Test3.dot
     {
         System.out.println("Start Test 5");
-        java.net.URL location = getClass().getClassLoader().getResource("Commit1Test2.dot");
-        String fileLocation = java.net.URLDecoder.decode(location.getPath(), "UTF-8");
 
         System.out.println("File found");
 
-        MutableGraph g = parseGraph(fileLocation);
+        MutableGraph g = parseGraph("Commit1Test3.dot");
 
         System.out.println("Parse Finished");
 
@@ -124,12 +106,9 @@ public class Part2Test {
     public void testSix() throws IOException // test ability to remove an edge. Uses Commit1Test3.dot
     {
         System.out.println("Start Test 6");
-        java.net.URL location = getClass().getClassLoader().getResource("Commit1Test2.dot");
-        String fileLocation = java.net.URLDecoder.decode(location.getPath(), "UTF-8");
 
-        System.out.println("File found");
 
-        MutableGraph g = parseGraph(fileLocation);
+        MutableGraph g = parseGraph("Commit1Test3.dot");
 
         System.out.println("Parse Finished");
 
@@ -145,12 +124,8 @@ public class Part2Test {
     public void testSeven() throws IOException // test ability to handle a case where an edge does not exist Uses Commit1Test3.dot
     {
         System.out.println("Start Test 7");
-        java.net.URL location = getClass().getClassLoader().getResource("Commit1Test2.dot");
-        String fileLocation = java.net.URLDecoder.decode(location.getPath(), "UTF-8");
 
-        System.out.println("File found");
-
-        MutableGraph g = parseGraph(fileLocation);
+        MutableGraph g = parseGraph("Commit1Test3.dot");
 
         System.out.println("Parse Finished");
 

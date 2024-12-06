@@ -16,14 +16,12 @@ public class Commit2Test {
     @Test
     public void firstTest() throws IOException //tests basic functionality by adding 1 node. input file: Commit1Test1.dot
     {
-        java.net.URL location = getClass().getClassLoader().getResource("Commit1Test1.dot");
-        String fileLocation = java.net.URLDecoder.decode(location.getPath(), "UTF-8");
 
-        MutableGraph g = parseGraph(fileLocation);
+        MutableGraph g = parseGraph("Commit1Test1.dot");
 
         g = Main.addNode(g, "C");
 
-        Boolean CCheck = g.nodes().stream().anyMatch(node -> node.name().toString().equals("C"));
+        boolean CCheck = g.nodes().stream().anyMatch(node -> node.name().toString().equals("C"));
         Main.toString(g);
         assertTrue(CCheck);
     }
@@ -31,10 +29,8 @@ public class Commit2Test {
     @Test
     public void secondTest() throws IOException //tests additional functionality by trying to add node that is already added. Input file: Commit1Test1
     {
-        java.net.URL location = getClass().getClassLoader().getResource("Commit1Test1.dot");
-        String fileLocation = java.net.URLDecoder.decode(location.getPath(), "UTF-8");
 
-        MutableGraph g = parseGraph(fileLocation);
+        MutableGraph g = parseGraph("Commit1Test1.dot");
         String input = Main.toString(g);
         String nodeName = "B";
 
@@ -48,10 +44,8 @@ public class Commit2Test {
     @Test
     public void thirdTest() throws IOException //tests basic functionality of addNodes by adding multiple node. input file: Commit1Test1.dot
     {
-        java.net.URL location = getClass().getClassLoader().getResource("Commit1Test1.dot");
-        String fileLocation = java.net.URLDecoder.decode(location.getPath(), "UTF-8");
 
-        MutableGraph g = parseGraph(fileLocation);
+        MutableGraph g = parseGraph("Commit1Test1.dot");
         String[] addNodes = {"C", "D", "E", "F"};
         g = Main.addNodes(g, addNodes);
 
@@ -68,10 +62,8 @@ public class Commit2Test {
     @Test
     public void fourthTest() throws IOException //tests additional functionality by trying to add node that is already added. Input file: Commit1Test1
     {
-        java.net.URL location = getClass().getClassLoader().getResource("Commit1Test1.dot");
-        String fileLocation = java.net.URLDecoder.decode(location.getPath(), "UTF-8");
 
-        MutableGraph g = parseGraph(fileLocation);
+        MutableGraph g = parseGraph("Commit1Test1.dot");
         String input = Main.toString(g);
         String[] nodeNames = {"B", "C", "D", "E", "F"};
 
