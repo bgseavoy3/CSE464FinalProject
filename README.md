@@ -18,7 +18,34 @@ search algorithm, which is somewhat similar between both, but I decided to keep 
 interface I made requires the user to use it to initialize either the BFS or DFS objects. These are from the last step, and store the rest of the strategy pattern. This keeps the whole system
 encapsulated, and lets the user interact with it without breaking this.
 
-Continuous integration - as I did not have this set up for the last project, I set it up for this one, I will add screenshots for that along with expected outputs below 
+Project Part 2:
+Continuous integration - as I did not have this set up for the last project, I set it up for this one
+
+Features Available - In order from project part 1 to 3
+Project part 1: using Commit1Test1.dot as input
+Feature 1: parsing graph and toString functionality
+![img.png](img.png)
+Feature 2: adding nodes ot imported graph
+![img_1.png](img_1.png)
+Feature 3: adding edges to imported graph
+![img_2.png](img_2.png)
+Feature 4: Output imported graph to dot file or graphics
+![img_3.png](img_3.png)
+
+project part 2: using Commit1Test1.dot as input for feature 1 and 2, and input.dot from project part 3 for feature 3 and 4
+Feature 1: Remove node or nodes
+![img_4.png](img_4.png)
+Feature 2: Remove edge
+![img_5.png](img_5.png)
+Feature 3: BFS
+![img_6.png](img_6.png)
+Feature 4: DFS
+![img_7.png](img_7.png)
+
+project part 3: using input1.dot as input
+Feature 1: Random Walk Search - showing randomness between two attempts as requested
+![img_8.png](img_8.png)
+![img_9.png](img_9.png)
 
 How to use:
 1) start by entering the command "mvn dependency:copy-dependencies -DoutputDirectory=lib" to double check dependencies

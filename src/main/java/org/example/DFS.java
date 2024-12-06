@@ -2,6 +2,7 @@ package org.example;
 
 import guru.nidi.graphviz.model.MutableGraph;
 import guru.nidi.graphviz.model.MutableNode;
+import guru.nidi.graphviz.model.Node;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -32,8 +33,9 @@ public class DFS extends Search implements Strategy
         }
         return null;
     }
-    public Strategy getStrategy(MutableGraph g, MutableNode sNode, MutableNode dNode)
+    @Override
+    protected void addPath(List<MutableNode> path)
     {
-        return new DFS(g, sNode, dNode);
+        sq.add(path);
     }
 }

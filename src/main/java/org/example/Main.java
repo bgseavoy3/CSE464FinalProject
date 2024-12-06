@@ -3,6 +3,7 @@ import java.io.*;
 import java.util.*;
 import java.util.regex.*;
 
+import guru.nidi.graphviz.attribute.Label;
 import guru.nidi.graphviz.engine.Format;
 import guru.nidi.graphviz.engine.Graphviz;
 import guru.nidi.graphviz.model.*;
@@ -14,16 +15,23 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         Scanner sc = new Scanner(System.in);
-        System.out.println("Please enter the file path of your dot file");
+        System.out.println("Please enter the name of your desired dot file (Must be in the file location src/java/resources/)");
         String filePath = sc.nextLine();
-        java.net.URL location = Main.class.getClassLoader().getResource(filePath);
-        String fileLocation = java.net.URLDecoder.decode(location.getPath(), "UTF-8");
-        MutableGraph result = parseGraph(fileLocation);
+        MutableGraph result = null;
+        try
+        {
+            result = parseGraph(filePath);
+        }
+        catch(IOException e)
+        {
+            System.out.println("Could not read file");
+        }
+        assert result != null;
         System.out.println("File is parsed successfully");
         boolean exit = false;
         String input;
         while (!exit) {
-            System.out.println("Please enter the number for what would would like to do\n 1: print out graph info\n2: add a new node\n3: add a new edge\n4: output graph to a file location\n5: Perform a BFS to find a path between 2 nodes\n6: Perform a DFS to find a path between nodes\n7: Perform the random walk search to find a path between two nodes\n8: exit");
+            System.out.println("Please enter the number for what would would like to do\n 1: print out graph info\n2: add a new node\n3: add a new edge\n4: output graph to a file location\n5: Perform a BFS to find a path between 2 nodes\n6: Perform a DFS to find a path between nodes\n7: Perform the random walk search to find a path between two nodes\n8: exit\n9: remove one or multiple nodes\n10: remove an edge");
             input = sc.nextLine();
             if (input.equals("1")) {
                 Main.toString(result);
@@ -40,7 +48,7 @@ public class Main {
                     while (!(input.equals("exit"))) {
                         input = sc.nextLine();
                         if (input.equals("exit")) {
-
+                            break;
                         }
                         else {
                             Main.addNode(result, input);
@@ -56,7 +64,7 @@ public class Main {
                 Main.addEdge(result, input1, input2);
             }
             if (input.equals("4")) {
-                System.out.println("Enter file output location");
+                System.out.println("Enter file output name");
                 String input1 = sc.nextLine();
                 System.out.println("Enter output type. Current forms available are dot and png");
                 String input2 = sc.nextLine();
@@ -72,9 +80,16 @@ public class Main {
                 String input1 = sc.nextLine();
                 System.out.println("Enter the name of the destination node");
                 String input2 = sc.nextLine();
-                MutableNode sNode = result.rootNodes().stream().filter(node -> node.name().toString().equals(input1)).findFirst().orElse(null);
-                MutableNode dNode = result.rootNodes().stream().filter(node -> node.name().toString().equals(input1)).findFirst().orElse(null);
-                graphSearch(result, sNode, dNode, Strategy.Algorithm.BFS);
+                MutableNode node1 = null;
+                MutableNode node2 = null;
+                for (MutableNode node : result.nodes()) {
+                    if (node.name().toString().equals(input1)) {
+                        node1 = node;
+                    } else if (node.name().toString().equals(input2)) {
+                        node2 = node;
+                    }
+                }
+                System.out.println("Path: " + graphSearch(result, node1, node2, Algorithm.BFS));
 
             }
             if (input.equals("6"))
@@ -83,9 +98,16 @@ public class Main {
                 String input1 = sc.nextLine();
                 System.out.println("Enter the name of the destination node");
                 String input2 = sc.nextLine();
-                MutableNode sNode = result.rootNodes().stream().filter(node -> node.name().toString().equals(input1)).findFirst().orElse(null);
-                MutableNode dNode = result.rootNodes().stream().filter(node -> node.name().toString().equals(input1)).findFirst().orElse(null);
-                graphSearch(result, sNode, dNode, Strategy.Algorithm.DFS);
+                MutableNode node1 = null;
+                MutableNode node2 = null;
+                for (MutableNode node : result.nodes()) {
+                    if (node.name().toString().equals(input1)) {
+                        node1 = node;
+                    } else if (node.name().toString().equals(input2)) {
+                        node2 = node;
+                    }
+                }
+                System.out.println("Path: " + graphSearch(result, node1, node2, Algorithm.DFS));
             }
             if (input.equals("7"))
             {
@@ -94,12 +116,48 @@ public class Main {
                 System.out.println("Enter the name of the destination node");
                 String input2 = sc.nextLine();
                 MutableNode sNode = result.rootNodes().stream().filter(node -> node.name().toString().equals(input1)).findFirst().orElse(null);
-                MutableNode dNode = result.rootNodes().stream().filter(node -> node.name().toString().equals(input1)).findFirst().orElse(null);
+                MutableNode dNode = result.rootNodes().stream().filter(node -> node.name().toString().equals(input2)).findFirst().orElse(null);
                 walkSearch(result,sNode,dNode);
             }
             if (input.equals("8"))
             {
                 exit = true;
+            }
+            if (input.equals("9"))
+            {
+                System.out.println("Type 1 to remove 1 node and 2 to remove multiple");
+                String input1 = sc.nextLine();
+                if(input1.equals("1"))
+                {
+                    System.out.println("Type the name of the node");
+                    String input2 = sc.nextLine();
+                    removeNode(result, input2);
+                }
+                if(input1.equals("2"))
+                {
+                    boolean loopExit = false;
+                    while(loopExit == false)
+                    {
+                        System.out.println("Type the name of the node and then press enter. Type exit to stop removing nodes");
+                        String input2 = sc.nextLine();
+                        if(input2.equals("exit"))
+                        {
+                            loopExit = true;
+                        }
+                        else
+                        {
+                            removeNode(result, input2);
+                        }
+                    }
+                }
+            }
+            if(input.equals("10"))
+            {
+                System.out.println("Enter source node name");
+                String input1 = sc.nextLine();
+                System.out.println("Enter destination node name");
+                String input2 = sc.nextLine();
+                Main.removeEdge(result, input1, input2);
             }
         }
     }
@@ -109,8 +167,12 @@ public class Main {
         //System.out.println("made it into method");
         MutableGraph result = mutGraph("test").setDirected(true);
         int iterator = 0;
-        File file = new File(filepath);
-        BufferedReader scanner = new BufferedReader(new FileReader(file));
+        //File file = new File(filepath);
+
+        InputStream file = Main.class.getClassLoader().getResourceAsStream(filepath);
+
+        assert file != null;
+        BufferedReader scanner = new BufferedReader(new InputStreamReader(file));
         String leftSide = null;
         String rightSide = null;
         boolean canContinue = true;
@@ -293,28 +355,26 @@ public class Main {
         MutableNode node2 = null;
         for (MutableNode node : g.nodes()) {
             if (node.name().toString().equals(srcLabel)) {
-                node1 = mutNode(srcLabel);
-                ;
+                node1 = node;
             } else if (node.name().toString().equals(dstLabel)) {
-                node2 = mutNode(dstLabel);
-                ;
+                node2 = node;
             }
-            for (Link link : node.links()) {
-                if (node.name().toString().equals(srcLabel) && link.to().name().toString().equals(dstLabel)) {
-                    System.out.println("Duplicate link detected. Please retry");
-                    return g;
-                }
-            }
-            if (node1 == null) {
-                node1 = mutNode(srcLabel);
-                g.add(node1);
-            }
-            if (node2 == null) {
-                node2 = mutNode(dstLabel);
-                g.add(node2);
-            }
-            g.addLink(node1, node2);
         }
+        if (node1 == null) {
+            node1 = mutNode(srcLabel);
+            g.add(node1);
+        }
+        if (node2 == null) {
+            node2 = mutNode(dstLabel);
+            g.add(node2);
+        }
+        for (Link link : node1.links()) {
+            if (link.to().name().toString().equals(dstLabel)) {
+                System.out.println("Duplicate link detected. Please retry");
+                return g;
+            }
+        }
+        node1.addLink(node2);
         return g;
     }
 
@@ -365,14 +425,16 @@ public class Main {
         return g;
     }
 
-    public static String graphSearch(MutableGraph g, MutableNode src, MutableNode dst, Strategy.Algorithm t) {
+    public static String graphSearch(MutableGraph g, MutableNode src, MutableNode dst, Algorithm t) {
         String result;
-        if (t == Strategy.Algorithm.BFS)
+        if (t == Algorithm.BFS)
         {
+            System.out.println("Conducting BFS");
             result = DoBFS(g, src, dst);
         }
         else
         {
+            System.out.println("Conducting DFS");
             result = DoDFS(g, src, dst);
         }
         return result;
@@ -388,7 +450,9 @@ public class Main {
         int numOfChecked = 0;
         while(notFound)
         {
-            MutableNode temp2 = getRandomNeighbor(temp);
+            randomToString(trail);
+            MutableNode temp2 = getRandomNeighbor(g, temp);
+            assert temp2 != null;
             if(temp2 == dst)
             {
                 trail.add(temp2);
@@ -405,7 +469,7 @@ public class Main {
                     {
                         trail.remove(trail.getLast());
                         temp = trail.getLast();
-                        numOfChecked = 0;
+                        numOfChecked = 1;
                     }
                     else
                     {
@@ -413,9 +477,18 @@ public class Main {
                         return;
                     }
                 }
+                else
+                {
+                    numOfChecked++;
+                }
+                if(isAllChecked(g, temp, checked))
+                {
+                    trail.remove(trail.getLast());
+                    temp = trail.getLast();
+                    numOfChecked = 1;
+                }
             }
             else {
-                randomToString(trail);
                 if (numOfChecked == temp.links().size())
                 {
                     //checked all neighbors of current node, must take a step back
@@ -423,7 +496,7 @@ public class Main {
                     {
                         trail.remove(trail.getLast());
                         temp = trail.getLast();
-                        numOfChecked = 0;
+                        numOfChecked = 1;
                     }
                     else
                     {
@@ -431,10 +504,12 @@ public class Main {
                         return;
                     }
                 }
-                else if (temp2.links().size() == 0)
+                else if (temp2.links().isEmpty())
                 {
                     // no links to go to, must find another node
-                    numOfChecked++;
+                    trail.remove(trail.getLast());
+                    temp = trail.getLast();
+                    numOfChecked = 1;
                 }
                 else
                 {
@@ -527,18 +602,23 @@ public class Main {
         DFS dfs = new DFS(g, src, dst);
         return dfs.Path();
     }
-    public static MutableNode getRandomNeighbor(MutableNode n)
-    {
+    public static MutableNode getRandomNeighbor(MutableGraph g, MutableNode n) {
         List<Link> links = new ArrayList<>(n.links());
-        if(links.isEmpty())
-        {
+        if (links.isEmpty()) {
             return null;
         }
-        int randomIndex = (int) (Math.random() * links.size());
-        return (MutableNode) links.get(randomIndex).to();
 
+        int randomIndex = (int) (Math.random() * links.size());
+        Link randomLink = links.get(randomIndex);
+
+        Label targetName = randomLink.to().name();
+
+        return g.nodes().stream()
+                .filter(node -> node.name().equals(targetName))
+                .findFirst()
+                .orElse(null);
     }
-    public static String randomToString(LinkedList<MutableNode> l)
+    public static void randomToString(LinkedList<MutableNode> l)
     {
         String str = "visiting Path{nodes=[";;
         for (int i = 0; i < l.size(); i++)
@@ -553,7 +633,7 @@ public class Main {
 
             }
         }
-        return str;
+        System.out.println(str);
     }
     public static boolean isChecked(MutableNode n, LinkedList<MutableNode> checked)
     {
@@ -565,5 +645,18 @@ public class Main {
             }
         }
         return false;
+    }
+    public static boolean isAllChecked(MutableGraph g, MutableNode n, LinkedList<MutableNode> checked)
+    {
+        for(Link link : n.links())
+        {
+            Label nodeName = link.to().name();
+            MutableNode targetName = g.nodes().stream().filter(node -> node.name().equals(nodeName)).findFirst().orElse(null);;
+            if(!isChecked(targetName, checked))
+            {
+                return false;
+            }
+        }
+        return true;
     }
 }

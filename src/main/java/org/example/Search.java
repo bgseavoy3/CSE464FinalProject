@@ -1,7 +1,9 @@
 package org.example;
 
+import guru.nidi.graphviz.attribute.Label;
 import guru.nidi.graphviz.model.MutableGraph;
 import guru.nidi.graphviz.model.MutableNode;
+import guru.nidi.graphviz.model.Node;
 
 import java.util.*;
 
@@ -35,44 +37,50 @@ public abstract class Search
     }
     protected abstract List<MutableNode> search();
 
+    protected abstract void addPath(List<MutableNode> path);
+
     protected List<MutableNode> getNeighbors(MutableNode node)
     {
         List<MutableNode> result = new ArrayList<>();
-        node.links().forEach(link -> result.add((MutableNode) link.to()));
+        node.links().forEach(link -> {
+
+            MutableNode toNode = findNode(link.to().name());
+            result.add(toNode);
+        });
         return result;
     }
     protected void exploreNeighbors(MutableNode current, List<MutableNode> path)
     {
-        for(MutableNode n : getNeighbors(current))
-        {
-            if (!visited.contains(n))
-            {
+        for (MutableNode n : getNeighbors(current)) {
+            if (!visited.contains(n)) {
                 visited.add(n);
-                List<MutableNode> nPath = new ArrayList<>(path);
+                ArrayList<MutableNode> nPath = new ArrayList<>(path);
                 nPath.add(n);
-                if (this instanceof BFS)
-                {
-                    sq.add(nPath);
-                }
-                else
-                {
-                    sq.addFirst(nPath);
-                }
+                addPath(nPath);
             }
         }
     }
-    protected String listToString(List<MutableNode> list)
-    {
-        String result = "";
-        while(!list.isEmpty())
+    protected String listToString(List<MutableNode> list) {
+        StringBuilder result = new StringBuilder();
+        if(list == null)
         {
-            result += list.remove(0).toString();
-            if(!list.isEmpty())
+            result.append("destination node not found\n");
+        }
+        for (int i = 0; i < list.size(); i++)
+        {
+            result.append(list.get(i).name());
+            if (i < list.size() - 1)
             {
-                result += " -> ";
+                result.append(" -> ");
             }
         }
-        return result;
+
+        return result.toString();
+    }
+    protected MutableNode findNode(Label name)
+    {
+        MutableNode fNode = g.rootNodes().stream().filter(node -> node.name().equals(name)).findFirst().orElse(null);
+        return fNode;
     }
 
 }

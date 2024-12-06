@@ -1,8 +1,8 @@
 org/example/Main.class
-org/example/Strategy$Algorithm$2.class
 org/example/Strategy.class
-org/example/Strategy$Algorithm.class
+org/example/Algorithm.class
+org/example/Algorithm$1.class
 org/example/BFS.class
 org/example/Search.class
-org/example/Strategy$Algorithm$1.class
+org/example/Algorithm$2.class
 org/example/DFS.class

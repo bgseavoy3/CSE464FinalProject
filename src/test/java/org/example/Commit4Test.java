@@ -15,13 +15,9 @@ import static org.example.Main.parseGraph;
 public class Commit4Test {
     @Test
     public void test() throws IOException { // tests output of outputDOTGraph, input file: Commit1Test2.dot
-        System.out.println("Start Test 2");
-        URL location = getClass().getClassLoader().getResource("Commit1Test2.dot");
-        String fileLocation = URLDecoder.decode(location.getPath(), "UTF-8");
+        System.out.println("Start Test 1");
 
-        System.out.println("File found");
-
-        MutableGraph g = parseGraph(fileLocation);
+        MutableGraph g = parseGraph("Commit1Test2.dot");
 
         System.out.println("Parse Finished");
         Main.outputDOTGraph(g, "test4Output.dot");
