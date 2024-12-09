@@ -15,13 +15,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class Commit3Test {
     @Test
     public void firstTest() throws IOException { // add an edge between two existing nodes. Input File: Commit1Test3.dot
-        System.out.println("Start Test 3");
-        java.net.URL location = getClass().getClassLoader().getResource("Commit1Test2.dot");
-        String fileLocation = java.net.URLDecoder.decode(location.getPath(), "UTF-8");
+        System.out.println("Start Test 1");
 
-        System.out.println("File found");
-
-        MutableGraph g = parseGraph(fileLocation);
+        MutableGraph g = parseGraph("Commit1Test3.dot");
 
         System.out.println("Parse Finished");
 
@@ -36,13 +32,9 @@ public class Commit3Test {
     }
     @Test
     public void secondTest() throws IOException { // add an edge between two new nodes. Input File: Commit1Test3.dot
-        System.out.println("Start Test 3");
-        java.net.URL location = getClass().getClassLoader().getResource("Commit1Test3.dot");
-        String fileLocation = java.net.URLDecoder.decode(location.getPath(), "UTF-8");
+        System.out.println("Start Test 2");
 
-        System.out.println("File found");
-
-        MutableGraph g = parseGraph(fileLocation);
+        MutableGraph g = parseGraph("Commit1Test3.dot");
 
         System.out.println("Parse Finished");
 
@@ -57,12 +49,8 @@ public class Commit3Test {
     @Test
     public void thirdTest() throws IOException { // add an edge between a new edge and an old edge. Input File: Commit1Test3.dot
         System.out.println("Start Test 3");
-        java.net.URL location = getClass().getClassLoader().getResource("Commit1Test3.dot");
-        String fileLocation = java.net.URLDecoder.decode(location.getPath(), "UTF-8");
 
-        System.out.println("File found");
-
-        MutableGraph g = parseGraph(fileLocation);
+        MutableGraph g = parseGraph("Commit1Test3.dot");
 
         System.out.println("Parse Finished");
 

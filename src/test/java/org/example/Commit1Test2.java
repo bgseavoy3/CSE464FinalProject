@@ -22,12 +22,9 @@ public class Commit1Test2 {
     @Test
     public void firstTest() throws IOException { // tests basic use of toString. Input file: Commit1Test1.dot
         System.out.println("Start Test 1");
-        java.net.URL location = getClass().getClassLoader().getResource("Commit1Test1.dot");
-        String fileLocation = java.net.URLDecoder.decode(location.getPath(), "UTF-8");
 
-        System.out.println("File found");
 
-        MutableGraph g = parseGraph(fileLocation);
+        MutableGraph g = parseGraph("Commit1Test1.dot");
 
         System.out.println("Parse Finished");
 
@@ -41,12 +38,9 @@ public class Commit1Test2 {
     public void secondTest() throws IOException // tests extensive use of toString with more edges than nodes, input file: Commit1Test2.dot
     {
         System.out.println("Start Test 2");
-        java.net.URL location = getClass().getClassLoader().getResource("Commit1Test2.dot");
-        String fileLocation = java.net.URLDecoder.decode(location.getPath(), "UTF-8");
 
-        System.out.println("File found");
 
-        MutableGraph g = parseGraph(fileLocation);
+        MutableGraph g = parseGraph("Commit1Test2.dot");
 
         System.out.println("Parse Finished");
 
@@ -60,12 +54,8 @@ public class Commit1Test2 {
     @Test
     public void thirdTest() throws IOException { // tests toString when using different node setups. Input file: Commit1Test3.dot
         System.out.println("Start Test 3");
-        java.net.URL location = getClass().getClassLoader().getResource("Commit1Test3.dot");
-        String fileLocation = java.net.URLDecoder.decode(location.getPath(), "UTF-8");
 
-        System.out.println("File found");
-
-        MutableGraph g = parseGraph(fileLocation);
+        MutableGraph g = parseGraph("Commit1Test3.dot");
 
         System.out.println("Parse Finished");
 
