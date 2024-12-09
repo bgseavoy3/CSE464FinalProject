@@ -15,27 +15,14 @@ public class DFS extends Search implements Strategy
         super(g, sNode, dNode);
     }
     @Override
-    public List<MutableNode> search()
-    {
-        while(!sq.isEmpty())
-        {
-            List<MutableNode> path =  sq.removeLast();
-            MutableNode current = path.get(path.size()-1);
-            if(current == null)
-            {
-                System.out.println("current node not found\n");
-            }
-            if(current.equals(dNode))
-            {
-                return path;
-            }
-            exploreNeighbors(current, path);
-        }
-        return null;
-    }
-    @Override
     protected void addPath(List<MutableNode> path)
     {
         sq.add(path);
     }
+    @Override
+    protected List<MutableNode> getPoll()
+    {
+        return sq.removeLast();
+    }
+
 }

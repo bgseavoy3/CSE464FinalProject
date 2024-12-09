@@ -15,32 +15,13 @@ public class BFS extends Search implements Strategy
         super(g, sNode, dNode);
     }
     @Override
-    public List<MutableNode> search()
-    {
-        while(!sq.isEmpty())
-        {
-            List<MutableNode> path = sq.poll();
-            MutableNode current = path.get(path.size()-1);
-            System.out.println("Current node: " + current.name());
-            System.out.println("Current path: " + listToString(path));
-            if(current == null)
-            {
-                System.out.println("current node not found\n");
-            }
-            else if(current.name().equals(dNode.name()))
-            {
-                System.out.println("Destination node found\n");
-                return path;
-            }
-            exploreNeighbors(current, path);
-        }
-        System.out.println("No path found\n");
-        return null;
-    }
-    @Override
     protected void addPath(List<MutableNode> path)
     {
         sq.add(path);
     }
-
+    @Override
+    protected List<MutableNode> getPoll()
+    {
+        return sq.poll();
+    }
 }

@@ -426,16 +426,18 @@ public class Main {
     }
 
     public static String graphSearch(MutableGraph g, MutableNode src, MutableNode dst, Algorithm t) {
-        String result;
+        String result; // USE STRATEGY.SEARCH()
         if (t == Algorithm.BFS)
         {
+            Strategy temp  = new BFS(g, src, dst);
             System.out.println("Conducting BFS");
-            result = DoBFS(g, src, dst);
+            result = Search.listToString(temp.search());
         }
         else
         {
+            Strategy temp  = new DFS(g, src, dst);
             System.out.println("Conducting DFS");
-            result = DoDFS(g, src, dst);
+            result = Search.listToString(temp.search());
         }
         return result;
     }

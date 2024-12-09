@@ -7,7 +7,7 @@ import guru.nidi.graphviz.model.Node;
 
 import java.util.*;
 
-public abstract class Search
+public abstract class Search implements Strategy
 {
     protected final MutableGraph g;
     protected final MutableNode sNode;
@@ -35,7 +35,6 @@ public abstract class Search
         sq.add(Collections.singletonList(sNode));
         visited.add(sNode);
     }
-    protected abstract List<MutableNode> search();
 
     protected abstract void addPath(List<MutableNode> path);
 
@@ -60,7 +59,7 @@ public abstract class Search
             }
         }
     }
-    protected String listToString(List<MutableNode> list) {
+    protected static String listToString(List<MutableNode> list) {
         StringBuilder result = new StringBuilder();
         if(list == null)
         {
@@ -77,10 +76,33 @@ public abstract class Search
 
         return result.toString();
     }
+    public final List<MutableNode> search()
+    {
+        while(!sq.isEmpty())
+        {
+            List<MutableNode> path = getPoll();
+            MutableNode current = getCurrent(path);
+            if(current == null)
+            {
+                System.out.println("current node not found\n");
+            }
+            else if(current.name().equals(dNode.name()))
+            {
+                return path;
+            }
+            exploreNeighbors(current, path);
+        }
+        return null;
+    }
     protected MutableNode findNode(Label name)
     {
         MutableNode fNode = g.rootNodes().stream().filter(node -> node.name().equals(name)).findFirst().orElse(null);
         return fNode;
+    }
+    protected abstract List<MutableNode> getPoll();
+    protected MutableNode getCurrent(List<MutableNode> path)
+    {
+            return path.get(path.size()-1);
     }
 
 }
